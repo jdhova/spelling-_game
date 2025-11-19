@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spelling Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Spelling Game</h1>
+        
+        <div class="game-info">
+            <div class="stat">
+                <span class="label">Level:</span>
+                <span id="level" class="value">1</span>
+            </div>
+            <div class="stat">
+                <span class="label">Score:</span>
+                <span id="score" class="value">0</span>
+            </div>
+            <div class="stat">
+                <span class="label">Word Length:</span>
+                <span id="word-length" class="value">4</span>
+            </div>
+        </div>
+
+        <div id="game-area">
+            <div class="word-display">
+                <div class="word-image-container">
+                    <img id="word-image" src="" alt="Word image" class="word-image">
+                </div>
+                <button id="play-sound" class="btn-sound">🔊 Play Word</button>
+                <p id="hint" class="hint"></p>
+            </div>
+
+            <div class="input-area">
+                <input type="text" id="spelling-input" placeholder="Type the word here..." autocomplete="off">
+                <button id="submit-btn" class="btn-primary">Submit</button>
+            </div>
+
+            <div id="feedback" class="feedback"></div>
+            
+            <div id="letter-comparison" class="letter-comparison hidden"></div>
+
+            <div class="progress">
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <p class="progress-text">
+                    <span id="words-completed">0</span> / <span id="words-total">4</span> words in this level
+                </p>
+            </div>
+        </div>
+
+        <div id="game-over" class="game-over hidden">
+            <h2>Game Complete! 🎉</h2>
+            <p>Final Score: <span id="final-score"></span></p>
+            <p>Highest Level Reached: <span id="final-level"></span></p>
+            <button id="restart-btn" class="btn-primary">Play Again</button>
+        </div>
+    </div>
+
+    <script src="mainscript.js"></script>
+</body>
+</html>
