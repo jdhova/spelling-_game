@@ -99,7 +99,11 @@ Successfully spell your way through all 6 levels to complete the game and see yo
 
 ## 🌐 Play Online
 
-Visit: [https://jdhova.github.io/spelling-_game/](https://jdhova.github.io/spelling-_game/)
+Once GitHub Pages finishes its first deployment (after the workflow run succeeds), the game will be live at:
+
+https://jdhova.github.io/spelling-_game/
+
+If the link 404s initially, wait for the Actions workflow ("Deploy to GitHub Pages") to complete, then refresh.
 
 ## 📝 License
 
