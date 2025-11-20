@@ -166,6 +166,20 @@ const gameOverEl = document.getElementById('game-over');
 const finalScoreEl = document.getElementById('final-score');
 const finalLevelEl = document.getElementById('final-level');
 const restartBtn = document.getElementById('restart-btn');
+const volumeControl = document.getElementById('volume-control');
+
+// Track voice readiness
+let voicesReady = false;
+function loadVoices() {
+    const voices = speechSynthesis.getVoices();
+    if (voices && voices.length > 0) {
+        voicesReady = true;
+    }
+}
+if ('speechSynthesis' in window) {
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+}
 
 // Initialize game
 function initGame() {
@@ -211,14 +225,28 @@ function loadNewWord() {
 
 // Speak the word using Web Speech API
 function speakWord() {
-    if ('speechSynthesis' in window && currentWord) {
-        const utterance = new SpeechSynthesisUtterance(currentWord.word);
-        utterance.rate = 0.8;
-        utterance.pitch = 1;
-        speechSynthesis.cancel(); // Cancel any ongoing speech
-        speechSynthesis.speak(utterance);
-    } else {
+    if (!currentWord) return;
+    if (!('speechSynthesis' in window)) {
         alert(`The word has ${currentWord.word.length} letters`);
+        return;
+    }
+    // Some Chrome OS devices block autoplay until user gesture; ensure call originates from a click
+    if (!voicesReady) {
+        // Queue a retry shortly to allow voices to populate
+        setTimeout(() => speakWord(), 250);
+        return;
+    }
+    const vol = volumeControl ? parseFloat(volumeControl.value) : 1;
+    const utterance = new SpeechSynthesisUtterance(currentWord.word);
+    utterance.rate = 0.8;
+    utterance.pitch = 1;
+    utterance.volume = isNaN(vol) ? 1 : vol; // 0.0 - 1.0
+    try {
+        speechSynthesis.cancel();
+        speechSynthesis.speak(utterance);
+    } catch (e) {
+        console.warn('Speech synthesis failed, fallback alert.', e);
+        alert(`Spell the word with ${currentWord.word.length} letters`);
     }
 }
 
@@ -368,7 +396,4 @@ restartBtn.addEventListener('click', initGame);
 // Start the game
 initGame();
 
-// Auto-play the first word after a short delay
-setTimeout(() => {
-    speakWord();
-}, 500);
+// Removed auto-play to avoid blocked audio on Chrome OS; user must press Play.
