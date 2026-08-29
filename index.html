@@ -3,67 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spelling Game</title>
+    <title>English Learning Adventure</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Spelling Game</h1>
-        
-        <div class="game-info">
-            <div class="stat">
-                <span class="label">Level:</span>
-                <span id="level" class="value">1</span>
-            </div>
-            <div class="stat">
-                <span class="label">Score:</span>
-                <span id="score" class="value">0</span>
-            </div>
-            <div class="stat">
-                <span class="label">Word Length:</span>
-                <span id="word-length" class="value">4</span>
-            </div>
-        </div>
+    <div class="page-bg"></div>
+    <main class="app-shell">
+        <header class="hero">
+            <p class="kicker">Grade 5-6 Hybrid UK + US</p>
+            <h1>English Learning Adventure</h1>
+            <p class="subtitle">Interactive lessons for spelling, grammar, sentence building, tenses, punctuation, and reading comprehension.</p>
+        </header>
 
-        <div id="game-area">
-            <div class="word-display">
-                <div class="word-image-container">
-                    <img id="word-image" src="" alt="Word image" class="word-image">
+        <section class="player-profile" aria-label="Player Profile">
+            <h2>Player Profile</h2>
+            <p>Enter a child name to keep progress separate on this device, or play without a name as Guest.</p>
+            <div class="profile-controls">
+                <input id="child-name" class="answer-input" type="text" placeholder="Type child name..." autocomplete="off" list="known-names">
+                <datalist id="known-names"></datalist>
+                <button id="load-profile" class="btn-primary" type="button">Start or Switch</button>
+                <button id="guest-profile" class="btn-secondary" type="button">Play Without Name</button>
+            </div>
+            <p id="profile-status" class="profile-status">Current player: Guest</p>
+        </section>
+
+        <section class="stats" aria-label="Overall Progress">
+            <article class="stat-card">
+                <h2>Total Score</h2>
+                <p id="total-score">0</p>
+            </article>
+            <article class="stat-card">
+                <h2>Stars</h2>
+                <p id="total-stars">0</p>
+            </article>
+            <article class="stat-card">
+                <h2>Current Module</h2>
+                <p id="current-module">Spelling</p>
+            </article>
+            <article class="stat-card">
+                <h2>Stage</h2>
+                <p id="current-stage">1</p>
+            </article>
+        </section>
+
+        <section class="toolbar" aria-label="Parent Controls">
+            <button id="print-report" class="btn-secondary">Print Parent Report</button>
+            <button id="reset-progress" class="btn-secondary danger">Reset Saved Progress</button>
+        </section>
+
+        <section class="modules" aria-label="Learning Sections">
+            <h2>Learning Sections</h2>
+            <p>Switch sections anytime. You do not need to finish one section before starting another.</p>
+            <div id="module-nav" class="module-nav"></div>
+        </section>
+
+        <section class="lesson-board" aria-live="polite">
+            <div id="lesson-header" class="lesson-header"></div>
+            <div id="lesson-content" class="lesson-content"></div>
+            <div id="lesson-feedback" class="lesson-feedback"></div>
+            <div class="teacher-panel">
+                <h3>Ask Teacher</h3>
+                <p>Type a question if you are confused. Example: "What is an adjective?"</p>
+                <div class="teacher-controls">
+                    <input id="teacher-question" class="answer-input" type="text" placeholder="Ask a question about this topic..." autocomplete="off">
+                    <button id="ask-teacher" class="btn-primary" type="button">Ask</button>
                 </div>
-                <button id="play-sound" class="btn-sound">🔊 Play Word</button>
-                <div class="audio-controls">
-                    <label for="volume-control">Volume:</label>
-                    <input type="range" id="volume-control" min="0" max="1" step="0.05" value="1">
+                <div class="teacher-voice-row">
+                    <label class="voice-select-label" for="teacher-voice-type">Teacher voice:</label>
+                    <select id="teacher-voice-type" class="voice-select" aria-label="Teacher voice type">
+                        <option value="female" selected>Female voice</option>
+                        <option value="male">Male voice</option>
+                    </select>
+                    <label class="voice-select-label" for="teacher-voice-name">Installed voice:</label>
+                    <select id="teacher-voice-name" class="voice-select" aria-label="Installed teacher voice">
+                        <option value="auto">Auto choose</option>
+                    </select>
+                    <button id="start-listening" class="small-btn" type="button">Start Mic</button>
+                    <button id="stop-listening" class="small-btn" type="button">Stop Mic</button>
+                    <button id="speak-answer" class="small-btn" type="button">Hear Teacher Reply</button>
+                    <label class="voice-toggle" for="teacher-auto-speak">
+                        <input id="teacher-auto-speak" type="checkbox" checked>
+                        Auto voice reply
+                    </label>
                 </div>
-                <p id="hint" class="hint"></p>
+                <details class="ai-teacher-settings">
+                    <summary>AI Teacher Mode (Optional)</summary>
+                    <p>Turn this on to use an LLM for richer, less repetitive answers.</p>
+                    <p>Your API key is now managed securely on the server (Vercel environment variable).</p>
+                    <div class="ai-grid">
+                        <label class="voice-toggle" for="enable-ai-teacher">
+                            <input id="enable-ai-teacher" type="checkbox">
+                            Enable AI Teacher
+                        </label>
+                        <label for="ai-endpoint">Backend endpoint</label>
+                        <input id="ai-endpoint" class="answer-input" type="text" placeholder="/api/teacher" autocomplete="off">
+                        <label for="ai-model">Model</label>
+                        <input id="ai-model" class="answer-input" type="text" placeholder="gpt-4.1-mini" autocomplete="off">
+                    </div>
+                    <div class="tutorial-actions">
+                        <button id="save-ai-settings" class="small-btn" type="button">Save AI Settings</button>
+                    </div>
+                    <p id="ai-status" class="voice-status">AI Teacher is currently off. Local smart tutor is active.</p>
+                </details>
+                <p id="voice-status" class="voice-status">Mic ready: click Start Mic and speak your question.</p>
+                <div id="teacher-answer" class="teacher-answer">I am here to help. Ask me about the current lesson.</div>
             </div>
+        </section>
 
-            <div class="input-area">
-                <input type="text" id="spelling-input" placeholder="Type the word here..." autocomplete="off">
-                <button id="submit-btn" class="btn-primary">Submit</button>
+        <section class="report">
+            <h2>Progress Report</h2>
+            <div id="report-grid" class="report-grid"></div>
+            <div class="mistake-section">
+                <h3>Mistake Review</h3>
+                <ul id="mistake-list"></ul>
             </div>
-
-            <div id="feedback" class="feedback"></div>
-            
-            <div id="letter-comparison" class="letter-comparison hidden"></div>
-
-            <div class="progress">
-                <div class="progress-bar">
-                    <div id="progress-fill" class="progress-fill"></div>
-                </div>
-                <p class="progress-text">
-                    <span id="words-completed">0</span> / <span id="words-total">4</span> words in this level
-                </p>
-            </div>
-        </div>
-
-        <div id="game-over" class="game-over hidden">
-            <h2>Game Complete! 🎉</h2>
-            <p>Final Score: <span id="final-score"></span></p>
-            <p>Highest Level Reached: <span id="final-level"></span></p>
-            <button id="restart-btn" class="btn-primary">Play Again</button>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script src="mainscript.js"></script>
 </body>
