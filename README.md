@@ -1,6 +1,6 @@
-# 🎮 English Learning Adventure
+# 🎮 BrightPath Learning Quest
 
-An interactive English learning game for Grade 5-6 learners (age 10-11), designed around a hybrid of UK and US curriculum goals.
+An interactive learning game for Grade 5-6 learners (age 10-11), with topics across English, Mathematics, Science, Social Studies, Health Education, and US/Canada world knowledge.
 
 ## 🌟 Features
 
