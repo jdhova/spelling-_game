@@ -2030,7 +2030,7 @@ async function getTeacherAnswerAdvanced(question, moduleId) {
         return llmAnswer;
     } catch (error) {
         console.warn("AI Teacher fallback due to error", error);
-        updateAiStatus("AI Teacher request failed. Local smart tutor answered instead.", "error");
+        updateAiStatus(buildAiFailureMessage(error), "error");
         return diversifyFallbackReply(fallback, moduleId);
     }
 }
@@ -2053,21 +2053,74 @@ async function queryAiTeacher(question, moduleId, settings) {
         history
     };
 
-    const response = await fetch(settings.endpoint, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-    });
+    const response = await fetchAiTeacherWithRetry(settings.endpoint, payload);
 
     if (!response.ok) {
-        throw new Error(`LLM request failed with status ${response.status}`);
+        let details = "";
+        try {
+            const errorBody = await response.json();
+            details = errorBody && errorBody.error ? `: ${errorBody.error}` : "";
+        } catch (_error) {
+            details = "";
+        }
+        throw new Error(`LLM request failed with status ${response.status}${details}`);
     }
 
     const data = await response.json();
     const text = data?.answer?.trim() || "";
     return text;
+}
+
+async function fetchAiTeacherWithRetry(endpoint, payload) {
+    const maxAttempts = 2;
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+        try {
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload),
+                signal: controller.signal
+            });
+
+            if (response.status === 429 || response.status >= 500) {
+                if (attempt < maxAttempts) {
+                    continue;
+                }
+            }
+
+            return response;
+        } catch (error) {
+            if (attempt >= maxAttempts) {
+                throw error;
+            }
+        } finally {
+            clearTimeout(timeoutId);
+        }
+    }
+
+    throw new Error("AI request did not complete");
+}
+
+function buildAiFailureMessage(error) {
+    const message = String(error && error.message ? error.message : "").toLowerCase();
+
+    if (message.includes("429")) {
+        return "AI Teacher is busy right now (rate limit). Local smart tutor answered instead.";
+    }
+    if (message.includes("401") || message.includes("403")) {
+        return "AI Teacher key or permission issue on server. Local smart tutor answered instead.";
+    }
+    if (message.includes("abort") || message.includes("timeout")) {
+        return "AI Teacher timed out. Local smart tutor answered instead.";
+    }
+
+    return "AI Teacher request failed. Local smart tutor answered instead.";
 }
 
 function buildCurrentQuestionContext(moduleId, q) {
