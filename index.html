@@ -86,25 +86,10 @@
                         Auto voice reply
                     </label>
                 </div>
-                <details class="ai-teacher-settings">
-                    <summary>AI Teacher Mode (Optional)</summary>
-                    <p>Turn this on to use an LLM for richer, less repetitive answers.</p>
-                    <p>Your API key is now managed securely on the server (Vercel environment variable).</p>
-                    <div class="ai-grid">
-                        <label class="voice-toggle" for="enable-ai-teacher">
-                            <input id="enable-ai-teacher" type="checkbox">
-                            Enable AI Teacher
-                        </label>
-                        <label for="ai-endpoint">Backend endpoint</label>
-                        <input id="ai-endpoint" class="answer-input" type="text" placeholder="/api/teacher" autocomplete="off">
-                        <label for="ai-model">Model</label>
-                        <input id="ai-model" class="answer-input" type="text" placeholder="gpt-4.1-mini" autocomplete="off">
-                    </div>
-                    <div class="tutorial-actions">
-                        <button id="save-ai-settings" class="small-btn" type="button">Save AI Settings</button>
-                    </div>
-                    <p id="ai-status" class="voice-status">AI Teacher is currently off. Local smart tutor is active.</p>
-                </details>
+                <div class="ai-teacher-settings">
+                    <p>AI Teacher works automatically on this website using secure server mode.</p>
+                    <p id="ai-status" class="voice-status">AI Teacher is connecting through the server. Local smart tutor is fallback.</p>
+                </div>
                 <p id="voice-status" class="voice-status">Mic ready: click Start Mic and speak your question.</p>
                 <div id="teacher-answer" class="teacher-answer">I am here to help. Ask me about the current lesson.</div>
             </div>

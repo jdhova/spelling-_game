@@ -832,13 +832,17 @@ function persistProfilesStore() {
 function bindGlobalEvents() {
     printReportBtn.addEventListener("click", () => window.print());
 
-    saveAiSettingsBtn.addEventListener("click", () => {
-        saveAiTeacherSettings();
-    });
+    if (saveAiSettingsBtn) {
+        saveAiSettingsBtn.addEventListener("click", () => {
+            saveAiTeacherSettings();
+        });
+    }
 
-    enableAiTeacherEl.addEventListener("change", () => {
-        saveAiTeacherSettings();
-    });
+    if (enableAiTeacherEl) {
+        enableAiTeacherEl.addEventListener("change", () => {
+            saveAiTeacherSettings();
+        });
+    }
 
     loadProfileBtn.addEventListener("click", () => {
         const entered = childNameEl.value.trim();
@@ -897,20 +901,25 @@ function bindGlobalEvents() {
 function loadAiTeacherSettings() {
     const raw = localStorage.getItem(AI_TEACHER_SETTINGS_KEY);
     const defaults = {
-        enabled: false,
+        enabled: true,
         endpoint: "/api/teacher",
         model: "gpt-4.1-mini"
     };
 
+    if (!enableAiTeacherEl || !aiEndpointEl || !aiModelEl) {
+        updateAiStatusForMode();
+        return;
+    }
+
     if (!raw) {
         applyAiSettingsToUI(defaults);
-        updateAiStatus("AI Teacher is currently off. Local smart tutor is active.");
+        updateAiStatusForMode();
         return;
     }
 
     try {
         const parsed = JSON.parse(raw);
-        applyAiSettingsToUI({ ...defaults, ...parsed });
+        applyAiSettingsToUI({ ...defaults, ...parsed, enabled: true });
     } catch (error) {
         applyAiSettingsToUI(defaults);
         console.warn("Failed to load AI teacher settings", error);
@@ -920,12 +929,17 @@ function loadAiTeacherSettings() {
 }
 
 function applyAiSettingsToUI(settings) {
+    if (!enableAiTeacherEl || !aiEndpointEl || !aiModelEl) return;
     enableAiTeacherEl.checked = Boolean(settings.enabled);
     aiEndpointEl.value = settings.endpoint || "/api/teacher";
     aiModelEl.value = settings.model || "gpt-4.1-mini";
 }
 
 function saveAiTeacherSettings() {
+    if (!enableAiTeacherEl || !aiEndpointEl || !aiModelEl) {
+        return;
+    }
+
     const settings = {
         enabled: enableAiTeacherEl.checked,
         endpoint: aiEndpointEl.value.trim() || "/api/teacher",
@@ -937,6 +951,14 @@ function saveAiTeacherSettings() {
 }
 
 function getAiTeacherSettings() {
+    if (!enableAiTeacherEl || !aiEndpointEl || !aiModelEl) {
+        return {
+            enabled: true,
+            endpoint: "/api/teacher",
+            model: "gpt-4.1-mini"
+        };
+    }
+
     return {
         enabled: enableAiTeacherEl.checked,
         endpoint: aiEndpointEl.value.trim(),
@@ -960,6 +982,7 @@ function updateAiStatusForMode() {
 }
 
 function updateAiStatus(message, mode = "") {
+    if (!aiStatusEl) return;
     aiStatusEl.textContent = message;
     aiStatusEl.className = "voice-status";
     if (mode) {
