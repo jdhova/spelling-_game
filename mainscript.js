@@ -8,6 +8,7 @@ const AI_TEACHER_SERVER_CONFIG = {
     endpoint: "/api/teacher",
     model: "gpt-4.1-mini"
 };
+const DEFAULT_MODULE_ID = "spelling";
 const QUESTIONS_PER_ROUND = 5;
 const SPELLING_MAX_TRIES = 5;
 const TARGET_TOTAL_QUESTIONS_PER_MODULE = 90;
@@ -47,13 +48,42 @@ const moduleTutorials = {
     }
 };
 
+const SUBJECTS = [
+    { id: "english", title: "English" },
+    { id: "mathematics", title: "Mathematics" },
+    { id: "science", title: "Science" },
+    { id: "social-studies", title: "Social Studies" },
+    { id: "health", title: "Health Education" },
+    { id: "world-knowledge", title: "US & Canada World Knowledge" }
+];
+
 const MODULES = [
-    { id: "spelling", title: "Spelling Studio", description: "Spell words with UK/US variants and audio clues." },
-    { id: "parts", title: "Parts of Speech", description: "Nouns, verbs, adjectives, and adverbs in context." },
-    { id: "sentences", title: "Sentence Builder", description: "Choose the best sentence construction." },
-    { id: "tenses", title: "Tense Quest", description: "Practice present, past, and future forms." },
-    { id: "punctuation", title: "Punctuation Lab", description: "Capital letters, punctuation, and sentence accuracy." },
-    { id: "reading", title: "Reading Mini Quiz", description: "Read short passages and answer questions." }
+    { id: "spelling", subject: "english", title: "Spelling Studio", description: "Spell words with UK/US variants and audio clues." },
+    { id: "parts", subject: "english", title: "Parts of Speech", description: "Nouns, verbs, adjectives, and adverbs in context." },
+    { id: "sentences", subject: "english", title: "Sentence Builder", description: "Choose the best sentence construction." },
+    { id: "tenses", subject: "english", title: "Tense Quest", description: "Practice present, past, and future forms." },
+    { id: "punctuation", subject: "english", title: "Punctuation Lab", description: "Capital letters, punctuation, and sentence accuracy." },
+    { id: "reading", subject: "english", title: "Reading Mini Quiz", description: "Read short passages and answer questions." },
+
+    { id: "mathArithmetic", subject: "mathematics", title: "Arithmetic", description: "Practice add, subtract, multiply, and divide with word problems." },
+    { id: "mathFractions", subject: "mathematics", title: "Fractions", description: "Understand equivalent fractions and compare fractional values." },
+    { id: "mathGeometry", subject: "mathematics", title: "Geometry", description: "Shapes, angles, perimeter, and area basics." },
+
+    { id: "scienceLife", subject: "science", title: "Life Science", description: "Living things, habitats, and body systems." },
+    { id: "sciencePhysical", subject: "science", title: "Physical Science", description: "Forces, energy, and states of matter." },
+    { id: "scienceEarth", subject: "science", title: "Earth Science", description: "Weather, water cycle, rocks, and planets." },
+
+    { id: "socialHistory", subject: "social-studies", title: "History", description: "Key events, timelines, and civic milestones." },
+    { id: "socialGeography", subject: "social-studies", title: "Geography", description: "Maps, regions, landforms, and climate ideas." },
+    { id: "socialCivics", subject: "social-studies", title: "Civics", description: "Citizenship, rules, and how government works." },
+
+    { id: "healthNutrition", subject: "health", title: "Nutrition", description: "Balanced meals, food groups, and hydration." },
+    { id: "healthHygiene", subject: "health", title: "Hygiene", description: "Healthy daily habits and germ prevention." },
+    { id: "healthWellness", subject: "health", title: "Safety & Wellness", description: "Exercise, sleep, and safe choices." },
+
+    { id: "worldUSCanada", subject: "world-knowledge", title: "US & Canada Basics", description: "Capitals, symbols, and key facts." },
+    { id: "worldLandmarks", subject: "world-knowledge", title: "Places & Landmarks", description: "Major cities, regions, and famous places." },
+    { id: "worldGovernment", subject: "world-knowledge", title: "Government & Society", description: "How communities, provinces, and states are organized." }
 ];
 
 const moduleData = {
@@ -667,6 +697,219 @@ const moduleData = {
     }
 };
 
+Object.assign(moduleTutorials, {
+    mathArithmetic: {
+        title: "What Is Arithmetic?",
+        simple: "Arithmetic is using numbers to add, subtract, multiply, and divide.",
+        tip: "Underline important numbers and words like total, left, each, and share."
+    },
+    mathFractions: {
+        title: "What Are Fractions?",
+        simple: "Fractions show parts of a whole. The top number is parts taken and the bottom number is total equal parts.",
+        tip: "Compare fractions by checking if pieces are the same size first."
+    },
+    mathGeometry: {
+        title: "What Is Geometry?",
+        simple: "Geometry helps us understand shapes, angles, and space.",
+        tip: "Draw a quick sketch before solving a geometry question."
+    },
+    scienceLife: {
+        title: "What Is Life Science?",
+        simple: "Life science studies living things like plants, animals, and humans.",
+        tip: "Ask: How does this living thing survive, grow, and reproduce?"
+    },
+    sciencePhysical: {
+        title: "What Is Physical Science?",
+        simple: "Physical science studies matter, motion, force, and energy.",
+        tip: "Think about pushes, pulls, and changes in energy."
+    },
+    scienceEarth: {
+        title: "What Is Earth Science?",
+        simple: "Earth science explores weather, rocks, oceans, and space around Earth.",
+        tip: "Look for cycles and patterns like seasons or water cycle steps."
+    },
+    socialHistory: {
+        title: "What Is History?",
+        simple: "History helps us learn how people and events changed over time.",
+        tip: "Pay attention to dates and put events in order."
+    },
+    socialGeography: {
+        title: "What Is Geography?",
+        simple: "Geography studies places, maps, landforms, climate, and how people live in regions.",
+        tip: "Use direction words and map symbols carefully."
+    },
+    socialCivics: {
+        title: "What Is Civics?",
+        simple: "Civics teaches rights, responsibilities, and how communities are governed.",
+        tip: "Ask what rule, role, or responsibility is being tested."
+    },
+    healthNutrition: {
+        title: "What Is Nutrition?",
+        simple: "Nutrition is choosing foods and drinks that keep your body healthy.",
+        tip: "Build meals with balance: fruits, vegetables, protein, grains, and water."
+    },
+    healthHygiene: {
+        title: "What Is Hygiene?",
+        simple: "Hygiene means daily habits that keep your body clean and prevent illness.",
+        tip: "Think of routine: wash, brush, clean, cover, and rest."
+    },
+    healthWellness: {
+        title: "What Is Wellness?",
+        simple: "Wellness includes physical activity, rest, safety, and healthy choices.",
+        tip: "Healthy routines are small actions done every day."
+    },
+    worldUSCanada: {
+        title: "What Is US & Canada Basics?",
+        simple: "Learn key facts about the United States and Canada.",
+        tip: "Connect each fact to a place, symbol, or government role."
+    },
+    worldLandmarks: {
+        title: "What Are Landmarks & Places?",
+        simple: "This topic covers famous places, regions, and physical landmarks in the US and Canada.",
+        tip: "Use map knowledge and location clues."
+    },
+    worldGovernment: {
+        title: "What Is Government & Society?",
+        simple: "This topic explains how government systems and communities are organized in the US and Canada.",
+        tip: "Match each role to what it is responsible for."
+    }
+});
+
+function buildThreeStagesFromBank(bank) {
+    return {
+        1: bank.slice(0, 2),
+        2: bank.slice(2, 4),
+        3: bank.slice(4, 6)
+    };
+}
+
+const supplementalModuleBanks = {
+    mathArithmetic: [
+        { prompt: "What is 48 + 27?", answer: "75", options: ["74", "75", "76", "77"], explanation: "Add tens and ones: 48 + 27 = 75." },
+        { prompt: "A class has 36 pencils and gives away 9. How many are left?", answer: "27", options: ["25", "26", "27", "28"], explanation: "Subtract: 36 - 9 = 27." },
+        { prompt: "What is 7 x 8?", answer: "56", options: ["54", "55", "56", "57"], explanation: "7 groups of 8 equals 56." },
+        { prompt: "What is 81 / 9?", answer: "9", options: ["8", "9", "10", "11"], explanation: "81 split into 9 equal groups gives 9." },
+        { prompt: "A pack has 6 markers. How many markers in 5 packs?", answer: "30", options: ["25", "28", "30", "36"], explanation: "Multiply 6 by 5 to get 30." },
+        { prompt: "Round 467 to the nearest ten.", answer: "470", options: ["460", "465", "470", "500"], explanation: "The ones digit is 7, so round up to 470." }
+    ],
+    mathFractions: [
+        { prompt: "Which fraction is equal to 1/2?", answer: "2/4", options: ["1/3", "2/4", "3/5", "4/5"], explanation: "2/4 simplifies to 1/2." },
+        { prompt: "Which is greater?", answer: "3/4", options: ["2/3", "3/4", "4/6", "5/8"], explanation: "3/4 is 0.75, greater than the others listed." },
+        { prompt: "What is 1/4 + 1/4?", answer: "1/2", options: ["1/4", "2/4", "1/2", "3/4"], explanation: "Two quarters make one half." },
+        { prompt: "If a pizza is cut into 8 equal slices and you eat 3, what fraction is eaten?", answer: "3/8", options: ["3/6", "3/8", "5/8", "8/3"], explanation: "You ate 3 out of 8 equal slices." },
+        { prompt: "Which fraction is the smallest?", answer: "1/6", options: ["1/2", "1/3", "1/4", "1/6"], explanation: "With the same numerator, larger denominator means smaller value." },
+        { prompt: "What is 2/5 of 20?", answer: "8", options: ["6", "8", "10", "12"], explanation: "One-fifth of 20 is 4, so two-fifths is 8." }
+    ],
+    mathGeometry: [
+        { prompt: "How many sides does a hexagon have?", answer: "6", options: ["5", "6", "7", "8"], explanation: "Hexagon means six sides." },
+        { prompt: "A right angle measures:", answer: "90 degrees", options: ["45 degrees", "90 degrees", "120 degrees", "180 degrees"], explanation: "A right angle is exactly 90 degrees." },
+        { prompt: "Perimeter of a rectangle with length 8 and width 3 is:", answer: "22", options: ["11", "16", "22", "24"], explanation: "Perimeter = 2 x (8 + 3) = 22." },
+        { prompt: "Area of a rectangle with length 7 and width 4 is:", answer: "28", options: ["11", "18", "24", "28"], explanation: "Area = length x width = 28." },
+        { prompt: "How many vertices does a triangle have?", answer: "3", options: ["2", "3", "4", "6"], explanation: "A triangle has three corners (vertices)." },
+        { prompt: "A shape with all points the same distance from the center is a:", answer: "Circle", options: ["Square", "Rectangle", "Triangle", "Circle"], explanation: "That is the definition of a circle." }
+    ],
+    scienceLife: [
+        { prompt: "Which process do plants use to make food using sunlight?", answer: "Photosynthesis", options: ["Respiration", "Digestion", "Photosynthesis", "Evaporation"], explanation: "Plants make food by photosynthesis." },
+        { prompt: "Which organ pumps blood around the body?", answer: "Heart", options: ["Lungs", "Heart", "Brain", "Kidney"], explanation: "The heart pumps blood." },
+        { prompt: "A habitat is:", answer: "The natural home of a living thing", options: ["A type of weather", "The natural home of a living thing", "A body part", "A rock layer"], explanation: "Habitat means where an organism lives." },
+        { prompt: "Which is a producer in a food chain?", answer: "Grass", options: ["Fox", "Eagle", "Grass", "Mushroom"], explanation: "Plants are producers because they make their own food." },
+        { prompt: "The stage when a caterpillar changes into a butterfly is called:", answer: "Metamorphosis", options: ["Migration", "Metamorphosis", "Hibernate", "Pollination"], explanation: "That life-cycle change is metamorphosis." },
+        { prompt: "Which gas do humans need to breathe in?", answer: "Oxygen", options: ["Carbon dioxide", "Nitrogen", "Oxygen", "Helium"], explanation: "Humans breathe in oxygen." }
+    ],
+    sciencePhysical: [
+        { prompt: "A push or a pull is called:", answer: "Force", options: ["Mass", "Force", "Volume", "Density"], explanation: "Force means push or pull." },
+        { prompt: "Which state of matter has a fixed shape and fixed volume?", answer: "Solid", options: ["Solid", "Liquid", "Gas", "Plasma"], explanation: "Solids keep both shape and volume." },
+        { prompt: "What type of energy is stored in food?", answer: "Chemical energy", options: ["Sound energy", "Chemical energy", "Heat energy", "Light energy"], explanation: "Food stores chemical energy." },
+        { prompt: "When ice melts, it changes from:", answer: "Solid to liquid", options: ["Liquid to gas", "Gas to liquid", "Solid to liquid", "Solid to gas"], explanation: "Melting turns a solid into a liquid." },
+        { prompt: "Which material is a good conductor of electricity?", answer: "Copper", options: ["Plastic", "Rubber", "Wood", "Copper"], explanation: "Metals like copper conduct electricity well." },
+        { prompt: "If an object speeds up, its motion has changed in:", answer: "Speed", options: ["Color", "Mass", "Speed", "Temperature"], explanation: "Speed is how fast motion happens." }
+    ],
+    scienceEarth: [
+        { prompt: "What process changes water vapor into clouds?", answer: "Condensation", options: ["Evaporation", "Condensation", "Precipitation", "Collection"], explanation: "Water vapor cools and condenses into cloud droplets." },
+        { prompt: "Which layer of Earth is the outer solid part?", answer: "Crust", options: ["Core", "Mantle", "Crust", "Inner sphere"], explanation: "The crust is Earth's outer rocky layer." },
+        { prompt: "A tool that measures temperature is a:", answer: "Thermometer", options: ["Barometer", "Thermometer", "Compass", "Scale"], explanation: "Thermometers measure temperature." },
+        { prompt: "Which planet is known as the Red Planet?", answer: "Mars", options: ["Venus", "Jupiter", "Mars", "Mercury"], explanation: "Mars appears reddish because of iron-rich dust." },
+        { prompt: "Rocks formed from cooled lava are called:", answer: "Igneous rocks", options: ["Sedimentary rocks", "Metamorphic rocks", "Igneous rocks", "Fossil rocks"], explanation: "Igneous rocks form when magma or lava cools." },
+        { prompt: "What causes day and night on Earth?", answer: "Earth's rotation", options: ["Earth's rotation", "Earth's orbit only", "The Moon's light", "Cloud movement"], explanation: "Earth rotating on its axis causes day and night." }
+    ],
+    socialHistory: [
+        { prompt: "A timeline is used to show:", answer: "Events in time order", options: ["Map directions", "Events in time order", "Math equations", "Weather data"], explanation: "Timelines arrange events from earlier to later." },
+        { prompt: "Who was the first President of the United States?", answer: "George Washington", options: ["Abraham Lincoln", "George Washington", "Thomas Jefferson", "John Adams"], explanation: "George Washington was the first U.S. president." },
+        { prompt: "In history, primary sources are:", answer: "Original materials from the time", options: ["Movies made later", "Original materials from the time", "Only textbooks", "Only websites"], explanation: "Primary sources come directly from the event period." },
+        { prompt: "What is remembered on Canada Day?", answer: "The formation of Canada as a country", options: ["First snowfall", "The formation of Canada as a country", "A world war ending", "A royal birthday"], explanation: "Canada Day marks Confederation on July 1, 1867." },
+        { prompt: "A major reason to study history is to:", answer: "Understand how the past shapes today", options: ["Memorize random dates only", "Understand how the past shapes today", "Avoid reading", "Predict exact future events"], explanation: "History helps explain present systems and choices." },
+        { prompt: "Which term means people moving from one place to another to live?", answer: "Migration", options: ["Revolution", "Migration", "Rotation", "Navigation"], explanation: "Migration is movement of people over time." }
+    ],
+    socialGeography: [
+        { prompt: "Which direction is opposite of east?", answer: "West", options: ["North", "South", "West", "Up"], explanation: "West is opposite east." },
+        { prompt: "Lines that run east-west on a globe are called:", answer: "Latitude lines", options: ["Longitude lines", "Latitude lines", "Border lines", "Compass lines"], explanation: "Latitude runs parallel to the equator." },
+        { prompt: "A narrow body of land connecting two larger lands is an:", answer: "Isthmus", options: ["Island", "Isthmus", "Peninsula", "Valley"], explanation: "An isthmus connects land masses." },
+        { prompt: "Which map helps show rainfall and temperature regions?", answer: "Climate map", options: ["Road map", "Political map", "Climate map", "Topographic map"], explanation: "Climate maps display weather pattern regions." },
+        { prompt: "A peninsula is land that is:", answer: "Surrounded by water on three sides", options: ["Completely underwater", "Surrounded by water on all sides", "Surrounded by water on three sides", "Flat with no water nearby"], explanation: "Peninsulas connect to mainland but have water on three sides." },
+        { prompt: "What does a map legend explain?", answer: "What symbols and colors mean", options: ["The age of the map", "What symbols and colors mean", "Who owns the map", "Only city populations"], explanation: "Legends decode symbols used on maps." }
+    ],
+    socialCivics: [
+        { prompt: "A citizen's responsibility is to:", answer: "Follow laws and respect others", options: ["Ignore community rules", "Follow laws and respect others", "Vote many times", "Make all laws alone"], explanation: "Citizens should obey laws and respect others' rights." },
+        { prompt: "Why do communities have rules?", answer: "To keep people safe and fair", options: ["To confuse people", "To keep people safe and fair", "To stop all fun", "To avoid teamwork"], explanation: "Rules help communities work safely and fairly." },
+        { prompt: "In a democracy, leaders are often chosen by:", answer: "Voting", options: ["Random guessing", "Voting", "Coin tosses", "No one"], explanation: "Voting allows citizens to choose leaders." },
+        { prompt: "Which branch in the U.S. government makes laws?", answer: "Legislative branch", options: ["Executive branch", "Judicial branch", "Legislative branch", "State branch"], explanation: "The legislative branch creates laws." },
+        { prompt: "Municipal government mainly serves:", answer: "Local communities and cities", options: ["Only global issues", "Local communities and cities", "Only foreign countries", "Only schools"], explanation: "Municipal governments handle local services." },
+        { prompt: "A good example of active citizenship is:", answer: "Helping improve your community", options: ["Littering in parks", "Ignoring safety signs", "Helping improve your community", "Damaging public property"], explanation: "Citizenship includes positive participation." }
+    ],
+    healthNutrition: [
+        { prompt: "Which meal is most balanced?", answer: "Grilled chicken, rice, vegetables, and water", options: ["Soda and candy", "Only chips", "Grilled chicken, rice, vegetables, and water", "Only fries"], explanation: "Balanced meals include multiple food groups and water." },
+        { prompt: "Why is drinking water important?", answer: "It helps body systems work properly", options: ["It replaces sleep", "It helps body systems work properly", "It weakens muscles", "It is not important"], explanation: "Hydration supports digestion, circulation, and temperature control." },
+        { prompt: "Which food is a healthy protein source?", answer: "Beans", options: ["Beans", "Candy", "Soda", "Ice cream"], explanation: "Beans provide plant protein and fiber." },
+        { prompt: "Whole grains usually provide more:", answer: "Fiber", options: ["Sugar", "Fiber", "Artificial color", "Salt only"], explanation: "Whole grains are rich in fiber." },
+        { prompt: "Breakfast helps students by:", answer: "Providing energy and focus", options: ["Making them more tired", "Providing energy and focus", "Replacing all other meals", "Removing need for water"], explanation: "A healthy breakfast supports concentration and energy." },
+        { prompt: "Which snack is healthiest?", answer: "Apple slices with yogurt", options: ["Apple slices with yogurt", "Candy bar and soda", "Only fries", "Sugary drink"], explanation: "Fruit with protein/dairy is a stronger snack choice." }
+    ],
+    healthHygiene: [
+        { prompt: "How long should you wash your hands with soap?", answer: "About 20 seconds", options: ["3 seconds", "About 20 seconds", "1 minute only with water", "No need before meals"], explanation: "Around 20 seconds removes many germs effectively." },
+        { prompt: "You should brush your teeth at least:", answer: "Twice a day", options: ["Once a week", "Twice a day", "Only after candy", "Never"], explanation: "Brushing twice daily helps prevent cavities." },
+        { prompt: "Covering a cough or sneeze helps:", answer: "Reduce spread of germs", options: ["Increase germs", "Reduce spread of germs", "Stop weather change", "Improve eyesight"], explanation: "Covering coughs and sneezes protects others." },
+        { prompt: "When should you wash hands?", answer: "Before eating and after restroom use", options: ["Only at night", "Before eating and after restroom use", "Only when told", "Never at school"], explanation: "These are key hygiene moments." },
+        { prompt: "Clean clothes and bathing regularly help with:", answer: "Body cleanliness and health", options: ["Less sleep", "Body cleanliness and health", "More germs", "None"], explanation: "Regular hygiene supports health and confidence." },
+        { prompt: "To avoid spreading illness, it is best to:", answer: "Stay home when very sick and rest", options: ["Share used tissues", "Stay home when very sick and rest", "Touch face often", "Skip handwashing"], explanation: "Rest and staying home when very sick can reduce spread." }
+    ],
+    healthWellness: [
+        { prompt: "A healthy amount of daily physical activity for children is about:", answer: "60 minutes", options: ["5 minutes", "20 minutes", "60 minutes", "3 hours of only screen games"], explanation: "Children benefit from around 60 minutes of activity daily." },
+        { prompt: "Why is sleep important for children?", answer: "It supports growth, mood, and learning", options: ["It is not important", "It supports growth, mood, and learning", "It replaces breakfast", "It makes memory weaker"], explanation: "Sleep supports brain and body development." },
+        { prompt: "When crossing the street, you should:", answer: "Stop, look both ways, and cross safely", options: ["Run without looking", "Stop, look both ways, and cross safely", "Use phone while crossing", "Cross between cars"], explanation: "Street safety starts with careful checking." },
+        { prompt: "Too much screen time without breaks can:", answer: "Cause eye strain and less movement", options: ["Always improve posture", "Cause eye strain and less movement", "Replace outdoor play", "Strengthen sleep quality"], explanation: "Long screen sessions can reduce movement and strain eyes." },
+        { prompt: "A healthy routine includes:", answer: "Exercise, sleep, balanced meals, and hydration", options: ["Skip meals", "Only gaming", "Exercise, sleep, balanced meals, and hydration", "No outdoor time"], explanation: "Wellness is built from balanced daily habits." },
+        { prompt: "If you feel unsafe, the best action is to:", answer: "Tell a trusted adult immediately", options: ["Keep it secret", "Tell a trusted adult immediately", "Ignore it", "Post online first"], explanation: "Trusted adults can help keep you safe quickly." }
+    ],
+    worldUSCanada: [
+        { prompt: "What is the capital city of Canada?", answer: "Ottawa", options: ["Toronto", "Vancouver", "Ottawa", "Montreal"], explanation: "Ottawa is Canada's capital." },
+        { prompt: "What is the capital city of the United States?", answer: "Washington, D.C.", options: ["New York", "Los Angeles", "Washington, D.C.", "Chicago"], explanation: "Washington, D.C. is the U.S. capital." },
+        { prompt: "How many stars are on the U.S. flag?", answer: "50", options: ["13", "48", "50", "52"], explanation: "There are 50 stars, one for each state." },
+        { prompt: "Which leaf is a national symbol on Canada's flag?", answer: "Maple leaf", options: ["Oak leaf", "Maple leaf", "Pine leaf", "Cedar leaf"], explanation: "Canada's flag features a red maple leaf." },
+        { prompt: "Canada is made up of provinces and:", answer: "Territories", options: ["Counties", "Districts", "Territories", "Republics"], explanation: "Canada has provinces and territories." },
+        { prompt: "The United States is made up of:", answer: "50 states", options: ["10 states", "25 states", "50 states", "60 states"], explanation: "The U.S. has 50 states." }
+    ],
+    worldLandmarks: [
+        { prompt: "Which waterfall is on the border of the U.S. and Canada?", answer: "Niagara Falls", options: ["Angel Falls", "Victoria Falls", "Niagara Falls", "Yosemite Falls"], explanation: "Niagara Falls sits on the U.S.-Canada border region." },
+        { prompt: "Which city is known as one of Canada's largest cities in Ontario?", answer: "Toronto", options: ["Calgary", "Toronto", "Halifax", "Quebec City"], explanation: "Toronto is a major city in Ontario." },
+        { prompt: "The Rocky Mountains are found in western:", answer: "North America", options: ["Africa", "Europe", "North America", "Australia"], explanation: "The Rockies stretch through western North America." },
+        { prompt: "Which U.S. statue is a symbol of freedom in New York Harbor?", answer: "Statue of Liberty", options: ["Lincoln Memorial", "Statue of Liberty", "Mount Rushmore", "Space Needle"], explanation: "The Statue of Liberty stands in New York Harbor." },
+        { prompt: "Which Canadian province is mostly French-speaking?", answer: "Quebec", options: ["Alberta", "Ontario", "Quebec", "Manitoba"], explanation: "Quebec is primarily French-speaking." },
+        { prompt: "Which ocean is on Canada's east coast?", answer: "Atlantic Ocean", options: ["Pacific Ocean", "Indian Ocean", "Atlantic Ocean", "Arctic Ocean only"], explanation: "Canada's east coast borders the Atlantic Ocean." }
+    ],
+    worldGovernment: [
+        { prompt: "In the U.S., the president leads the:", answer: "Executive branch", options: ["Legislative branch", "Judicial branch", "Executive branch", "Provincial branch"], explanation: "The U.S. president is head of the executive branch." },
+        { prompt: "In Canada, the head of government is the:", answer: "Prime Minister", options: ["Governor", "Prime Minister", "Chief Justice", "Speaker only"], explanation: "Canada's head of government is the Prime Minister." },
+        { prompt: "Voting is important because it lets people:", answer: "Choose representatives", options: ["Skip laws", "Choose representatives", "Control courts directly", "Ignore government"], explanation: "Voting allows citizens to choose leaders." },
+        { prompt: "Laws are made by elected representatives in:", answer: "Legislatures or parliaments", options: ["Sports teams", "Libraries", "Legislatures or parliaments", "Weather stations"], explanation: "Law-making happens in legislatures/parliaments." },
+        { prompt: "A constitution is:", answer: "A framework of important rules for government", options: ["A weather report", "A school timetable", "A framework of important rules for government", "A city map"], explanation: "Constitutions define key government principles." },
+        { prompt: "A good citizen in both countries should:", answer: "Respect laws and community rights", options: ["Ignore all rules", "Respect laws and community rights", "Vote many times", "Only think of self"], explanation: "Citizenship includes respect and responsibility." }
+    ]
+};
+
+Object.keys(supplementalModuleBanks).forEach((moduleId) => {
+    moduleData[moduleId] = buildThreeStagesFromBank(supplementalModuleBanks[moduleId]);
+});
+
 const extraSpellingWords = {
     1: [
         { word: "meter", accepted: ["meter", "metre"], variantNote: "US: meter, UK: metre", hint: "A unit used to measure length.", image: "https://images.unsplash.com/photo-1518152006812-edab29b069ac?w=700" },
@@ -690,6 +933,7 @@ const extraSpellingWords = {
 
 const appState = {
     activeProfileName: "Guest",
+    activeSubject: "english",
     activeModule: "spelling",
     currentQuestion: null,
     usedQuestionKeys: {},
@@ -708,6 +952,7 @@ const totalScoreEl = document.getElementById("total-score");
 const totalStarsEl = document.getElementById("total-stars");
 const currentModuleEl = document.getElementById("current-module");
 const currentStageEl = document.getElementById("current-stage");
+const subjectNavEl = document.getElementById("subject-nav");
 const moduleNavEl = document.getElementById("module-nav");
 const lessonHeaderEl = document.getElementById("lesson-header");
 const lessonContentEl = document.getElementById("lesson-content");
@@ -748,6 +993,7 @@ bindGlobalEvents();
 setupTeacherVoice();
 hydrateActiveProfile();
 renderKnownProfileNames();
+renderSubjectNav();
 renderModuleNav();
 switchModule(appState.activeModule);
 updateDashboard();
@@ -814,6 +1060,7 @@ function saveState() {
 
     savedProfiles[key] = {
         name: profileName,
+        activeSubject: appState.activeSubject,
         totalScore: appState.totalScore,
         stars: appState.stars,
         activeModule: appState.activeModule,
@@ -1079,7 +1326,8 @@ function applyProfile(name, isStartup = false) {
         loadProfileIntoState(existing);
     } else {
         resetCurrentRuntimeProgress();
-        appState.activeModule = "spelling";
+        appState.activeSubject = "english";
+        appState.activeModule = DEFAULT_MODULE_ID;
     }
 
     rememberActiveProfile(cleanedName);
@@ -1097,7 +1345,10 @@ function applyProfile(name, isStartup = false) {
 function loadProfileIntoState(profile) {
     appState.totalScore = Number(profile.totalScore) || 0;
     appState.stars = Number(profile.stars) || 0;
-    appState.activeModule = MODULES.some((m) => m.id === profile.activeModule) ? profile.activeModule : "spelling";
+    appState.activeModule = MODULES.some((m) => m.id === profile.activeModule) ? profile.activeModule : DEFAULT_MODULE_ID;
+    appState.activeSubject = SUBJECTS.some((s) => s.id === profile.activeSubject)
+        ? profile.activeSubject
+        : getSubjectByModule(appState.activeModule);
 
     resetCurrentRuntimeProgress();
     if (profile.progress && typeof profile.progress === "object") {
@@ -1120,22 +1371,25 @@ function resetCurrentProfileProgress() {
     resetCurrentRuntimeProgress();
     appState.totalScore = 0;
     appState.stars = 0;
-    appState.activeModule = "spelling";
+    appState.activeSubject = "english";
+    appState.activeModule = DEFAULT_MODULE_ID;
 
     const key = normalizeProfileKey(appState.activeProfileName);
     savedProfiles[key] = {
         name: appState.activeProfileName,
+        activeSubject: appState.activeSubject,
         totalScore: 0,
         stars: 0,
-        activeModule: "spelling",
+        activeModule: DEFAULT_MODULE_ID,
         progress: deepClone(appState.progress),
         updatedAt: new Date().toISOString()
     };
 
     persistProfilesStore();
     updateProfileStatus("Progress reset for this player.");
+    renderSubjectNav();
     renderModuleNav();
-    switchModule("spelling");
+    switchModule(DEFAULT_MODULE_ID);
     updateDashboard();
     renderReport();
 }
@@ -1199,7 +1453,9 @@ function getCookie(name) {
 function renderModuleNav() {
     moduleNavEl.innerHTML = "";
 
-    MODULES.forEach((module) => {
+    const visibleModules = getModulesForSubject(appState.activeSubject);
+
+    visibleModules.forEach((module) => {
         const progress = appState.progress[module.id];
         const btn = document.createElement("button");
         btn.className = `module-btn${appState.activeModule === module.id ? " active" : ""}`;
@@ -1209,7 +1465,43 @@ function renderModuleNav() {
     });
 }
 
+function renderSubjectNav() {
+    if (!subjectNavEl) return;
+    subjectNavEl.innerHTML = "";
+
+    SUBJECTS.forEach((subject) => {
+        const btn = document.createElement("button");
+        btn.className = `subject-btn${appState.activeSubject === subject.id ? " active" : ""}`;
+        btn.type = "button";
+        btn.textContent = subject.title;
+        btn.addEventListener("click", () => switchSubject(subject.id));
+        subjectNavEl.appendChild(btn);
+    });
+}
+
+function switchSubject(subjectId) {
+    if (appState.activeSubject === subjectId && getSubjectByModule(appState.activeModule) === subjectId) {
+        return;
+    }
+
+    const subjectModules = getModulesForSubject(subjectId);
+    if (!subjectModules.length) return;
+
+    appState.activeSubject = subjectId;
+    switchModule(subjectModules[0].id);
+}
+
+function getModulesForSubject(subjectId) {
+    return MODULES.filter((module) => module.subject === subjectId);
+}
+
+function getSubjectByModule(moduleId) {
+    const module = MODULES.find((item) => item.id === moduleId);
+    return module ? module.subject : "english";
+}
+
 function switchModule(moduleId) {
+    appState.activeSubject = getSubjectByModule(moduleId);
     appState.activeModule = moduleId;
     appState.roundAnswered = 0;
     appState.roundCorrect = 0;
@@ -1237,6 +1529,7 @@ function switchModule(moduleId) {
     lessonFeedbackEl.className = "lesson-feedback";
     lessonFeedbackEl.textContent = "Select an answer and get instant feedback with explanation.";
 
+    renderSubjectNav();
     renderModuleNav();
     updateDashboard();
     nextQuestion();
@@ -1823,7 +2116,7 @@ function getTeacherAnswer(question, moduleId) {
 
     if (!topic) {
         const tutorial = moduleTutorials[moduleId];
-        return `${tutorial.simple} Ask me about a topic like noun, verb, tense, punctuation, main idea, or spelling strategy.`;
+        return buildTeacherScopePrompt(moduleId, tutorial);
     }
 
     if (wantsDifference) {
@@ -2008,6 +2301,21 @@ function buildDifferenceAnswer(topic, q) {
         return "Retrieval vs Inference: retrieval is directly in the text, inference is figured out from clues.";
     }
     return `${buildCoreAnswer(topic)} If you want a comparison, ask: 'difference between X and Y'.`;
+}
+
+function buildTeacherScopePrompt(moduleId, tutorial) {
+    const prompts = {
+        english: "Ask me about noun, verb, tense, punctuation, reading clues, or spelling strategy.",
+        mathematics: "Ask me about arithmetic steps, fractions, geometry, or word-problem strategies.",
+        science: "Ask me about life science, physical science, earth systems, or key science terms.",
+        "social-studies": "Ask me about history timelines, geography maps, or civics responsibilities.",
+        health: "Ask me about nutrition, hygiene routines, safety, and healthy habits.",
+        "world-knowledge": "Ask me about US/Canada capitals, landmarks, symbols, and government basics."
+    };
+
+    const subjectId = getSubjectByModule(moduleId);
+    const scopedPrompt = prompts[subjectId] || "Ask me about this lesson and I will guide you step by step.";
+    return `${tutorial.simple} ${scopedPrompt}`;
 }
 
 function appendExtraSpellingWords() {
