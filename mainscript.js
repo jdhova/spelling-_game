@@ -977,6 +977,7 @@ const loadProfileBtn = document.getElementById("load-profile");
 const guestProfileBtn = document.getElementById("guest-profile");
 const profileStatusEl = document.getElementById("profile-status");
 const knownNamesEl = document.getElementById("known-names");
+const reportOwnerEl = document.getElementById("report-owner");
 
 const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
 let teacherRecognition = null;
@@ -1318,9 +1319,10 @@ function applyProfile(name, isStartup = false) {
     const cleanedName = sanitizeDisplayName(name);
     const key = normalizeProfileKey(cleanedName);
     const existing = savedProfiles[key];
+    const resolvedName = existing ? existing.name : cleanedName;
 
-    appState.activeProfileName = cleanedName;
-    childNameEl.value = cleanedName;
+    appState.activeProfileName = resolvedName;
+    childNameEl.value = resolvedName;
 
     if (existing) {
         loadProfileIntoState(existing);
@@ -1330,8 +1332,8 @@ function applyProfile(name, isStartup = false) {
         appState.activeModule = DEFAULT_MODULE_ID;
     }
 
-    rememberActiveProfile(cleanedName);
-    updateProfileStatus(existing ? "Loaded saved progress." : "New profile created.");
+    rememberActiveProfile(resolvedName);
+    updateProfileStatus(existing ? "Name already exists, so we switched to that child profile." : "New profile created with a unique name.");
 
     if (!isStartup) {
         renderModuleNav();
@@ -1833,6 +1835,10 @@ function finishRound() {
 }
 
 function renderReport() {
+    if (reportOwnerEl) {
+        reportOwnerEl.textContent = `Parent report for: ${appState.activeProfileName}`;
+    }
+
     reportGridEl.innerHTML = "";
 
     MODULES.forEach((module) => {
