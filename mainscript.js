@@ -3,6 +3,11 @@ const SESSION_PROFILE_KEY = "english_learning_active_profile";
 const COOKIE_PROFILE_KEY = "english_learning_active_profile";
 const LEGACY_STORAGE_KEY = "english_learning_adventure_v1";
 const AI_TEACHER_SETTINGS_KEY = "english_learning_ai_teacher_settings_v1";
+const AI_TEACHER_SERVER_CONFIG = {
+    enabled: true,
+    endpoint: "/api/teacher",
+    model: "gpt-4.1-mini"
+};
 const QUESTIONS_PER_ROUND = 5;
 const SPELLING_MAX_TRIES = 5;
 const TARGET_TOTAL_QUESTIONS_PER_MODULE = 90;
@@ -721,10 +726,6 @@ const teacherAutoSpeakEl = document.getElementById("teacher-auto-speak");
 const teacherVoiceTypeEl = document.getElementById("teacher-voice-type");
 const teacherVoiceNameEl = document.getElementById("teacher-voice-name");
 const voiceStatusEl = document.getElementById("voice-status");
-const enableAiTeacherEl = document.getElementById("enable-ai-teacher");
-const aiEndpointEl = document.getElementById("ai-endpoint");
-const aiModelEl = document.getElementById("ai-model");
-const saveAiSettingsBtn = document.getElementById("save-ai-settings");
 const aiStatusEl = document.getElementById("ai-status");
 const childNameEl = document.getElementById("child-name");
 const loadProfileBtn = document.getElementById("load-profile");
@@ -742,7 +743,7 @@ initializeProgress();
 appendExtraSpellingWords();
 expandQuestionBanks();
 loadProfilesStore();
-loadAiTeacherSettings();
+initializeAiTeacherMode();
 bindGlobalEvents();
 setupTeacherVoice();
 hydrateActiveProfile();
@@ -832,18 +833,6 @@ function persistProfilesStore() {
 function bindGlobalEvents() {
     printReportBtn.addEventListener("click", () => window.print());
 
-    if (saveAiSettingsBtn) {
-        saveAiSettingsBtn.addEventListener("click", () => {
-            saveAiTeacherSettings();
-        });
-    }
-
-    if (enableAiTeacherEl) {
-        enableAiTeacherEl.addEventListener("change", () => {
-            saveAiTeacherSettings();
-        });
-    }
-
     loadProfileBtn.addEventListener("click", () => {
         const entered = childNameEl.value.trim();
         if (!entered) {
@@ -898,72 +887,21 @@ function bindGlobalEvents() {
     });
 }
 
-function loadAiTeacherSettings() {
-    const raw = localStorage.getItem(AI_TEACHER_SETTINGS_KEY);
-    const defaults = {
-        enabled: true,
-        endpoint: "/api/teacher",
-        model: "gpt-4.1-mini"
-    };
+function initializeAiTeacherMode() {
+    clearLegacyAiTeacherSettings();
+    updateAiStatusForMode();
+}
 
-    if (!enableAiTeacherEl || !aiEndpointEl || !aiModelEl) {
-        updateAiStatusForMode();
-        return;
-    }
-
-    if (!raw) {
-        applyAiSettingsToUI(defaults);
-        updateAiStatusForMode();
-        return;
-    }
-
+function clearLegacyAiTeacherSettings() {
     try {
-        const parsed = JSON.parse(raw);
-        applyAiSettingsToUI({ ...defaults, ...parsed, enabled: true });
+        localStorage.removeItem(AI_TEACHER_SETTINGS_KEY);
     } catch (error) {
-        applyAiSettingsToUI(defaults);
-        console.warn("Failed to load AI teacher settings", error);
+        console.warn("Unable to clear legacy AI teacher settings", error);
     }
-
-    updateAiStatusForMode();
-}
-
-function applyAiSettingsToUI(settings) {
-    if (!enableAiTeacherEl || !aiEndpointEl || !aiModelEl) return;
-    enableAiTeacherEl.checked = Boolean(settings.enabled);
-    aiEndpointEl.value = settings.endpoint || "/api/teacher";
-    aiModelEl.value = settings.model || "gpt-4.1-mini";
-}
-
-function saveAiTeacherSettings() {
-    if (!enableAiTeacherEl || !aiEndpointEl || !aiModelEl) {
-        return;
-    }
-
-    const settings = {
-        enabled: enableAiTeacherEl.checked,
-        endpoint: aiEndpointEl.value.trim() || "/api/teacher",
-        model: aiModelEl.value.trim() || "gpt-4.1-mini"
-    };
-
-    localStorage.setItem(AI_TEACHER_SETTINGS_KEY, JSON.stringify(settings));
-    updateAiStatusForMode();
 }
 
 function getAiTeacherSettings() {
-    if (!enableAiTeacherEl || !aiEndpointEl || !aiModelEl) {
-        return {
-            enabled: true,
-            endpoint: "/api/teacher",
-            model: "gpt-4.1-mini"
-        };
-    }
-
-    return {
-        enabled: enableAiTeacherEl.checked,
-        endpoint: aiEndpointEl.value.trim(),
-        model: aiModelEl.value.trim()
-    };
+    return { ...AI_TEACHER_SERVER_CONFIG };
 }
 
 function updateAiStatusForMode() {
@@ -978,7 +916,7 @@ function updateAiStatusForMode() {
         return;
     }
 
-    updateAiStatus(`AI Teacher is on via server endpoint. Model: ${settings.model}`);
+    updateAiStatus(`AI Teacher is automatic via server endpoint. Model: ${settings.model}`);
 }
 
 function updateAiStatus(message, mode = "") {

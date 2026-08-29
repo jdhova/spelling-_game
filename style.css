@@ -395,29 +395,10 @@ h1 {
     margin-bottom: 8px;
 }
 
-.ai-teacher-settings summary {
-    cursor: pointer;
-    font-weight: 700;
-    color: #24415f;
-    margin-bottom: 8px;
-}
-
 .ai-teacher-settings p {
     margin: 8px 0;
     color: #455973;
     font-size: 0.9rem;
-}
-
-.ai-grid {
-    display: grid;
-    gap: 8px;
-    grid-template-columns: 1fr;
-}
-
-.ai-grid label {
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: #2b4360;
 }
 
 .letter-comparison {
