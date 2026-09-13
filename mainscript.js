@@ -54,7 +54,8 @@ const SUBJECTS = [
     { id: "science", title: "Science" },
     { id: "social-studies", title: "Social Studies" },
     { id: "health", title: "Health Education" },
-    { id: "world-knowledge", title: "US & Canada World Knowledge" }
+    { id: "world-knowledge", title: "US & Canada World Knowledge" },
+    { id: "reasoning", title: "Reasoning Skills" }
 ];
 
 const MODULES = [
@@ -83,7 +84,11 @@ const MODULES = [
 
     { id: "worldUSCanada", subject: "world-knowledge", title: "US & Canada Basics", description: "Capitals, symbols, and key facts." },
     { id: "worldLandmarks", subject: "world-knowledge", title: "Places & Landmarks", description: "Major cities, regions, and famous places." },
-    { id: "worldGovernment", subject: "world-knowledge", title: "Government & Society", description: "How communities, provinces, and states are organized." }
+    { id: "worldGovernment", subject: "world-knowledge", title: "Government & Society", description: "How communities, provinces, and states are organized." },
+
+    { id: "reasoningLogical", subject: "reasoning", title: "Logical Reasoning", description: "Patterns, sequences, deduction, and if-then thinking." },
+    { id: "reasoningVerbal", subject: "reasoning", title: "Verbal Reasoning", description: "Meaning, analogies, context clues, and language logic." },
+    { id: "reasoningCognitive", subject: "reasoning", title: "Cognitive Reasoning", description: "Memory, planning, attention, and multi-step problem solving." }
 ];
 
 const moduleData = {
@@ -772,6 +777,21 @@ Object.assign(moduleTutorials, {
         title: "What Is Government & Society?",
         simple: "This topic explains how government systems and communities are organized in the US and Canada.",
         tip: "Match each role to what it is responsible for."
+    },
+    reasoningLogical: {
+        title: "What Is Logical Reasoning?",
+        simple: "Logical reasoning means using clues and rules to reach the best answer.",
+        tip: "Look for patterns and test each choice before you decide."
+    },
+    reasoningVerbal: {
+        title: "What Is Verbal Reasoning?",
+        simple: "Verbal reasoning uses word meaning and language clues to solve problems.",
+        tip: "Replace the key word in your head and check which choice still makes sense."
+    },
+    reasoningCognitive: {
+        title: "What Is Cognitive Reasoning?",
+        simple: "Cognitive reasoning builds focus, memory, planning, and smart decision-making.",
+        tip: "Break big questions into small steps and solve one step at a time."
     }
 });
 
@@ -903,6 +923,30 @@ const supplementalModuleBanks = {
         { prompt: "Laws are made by elected representatives in:", answer: "Legislatures or parliaments", options: ["Sports teams", "Libraries", "Legislatures or parliaments", "Weather stations"], explanation: "Law-making happens in legislatures/parliaments." },
         { prompt: "A constitution is:", answer: "A framework of important rules for government", options: ["A weather report", "A school timetable", "A framework of important rules for government", "A city map"], explanation: "Constitutions define key government principles." },
         { prompt: "A good citizen in both countries should:", answer: "Respect laws and community rights", options: ["Ignore all rules", "Respect laws and community rights", "Vote many times", "Only think of self"], explanation: "Citizenship includes respect and responsibility." }
+    ],
+    reasoningLogical: [
+        { prompt: "Find the next number pattern: 2, 4, 8, 16, ...", answer: "32", options: ["18", "24", "30", "32"], explanation: "Each number is doubled, so 16 x 2 = 32." },
+        { prompt: "If all glims are flarps and all flarps are zibs, then all glims are:", answer: "zibs", options: ["glorps", "zibs", "not flarps", "none"], explanation: "If A is in B and B is in C, then A is in C." },
+        { prompt: "Which does NOT belong: triangle, square, circle, carrot?", answer: "carrot", options: ["triangle", "square", "circle", "carrot"], explanation: "Three are shapes, carrot is not a shape." },
+        { prompt: "If it is raining, then the ground is wet. The ground is not wet. What is most logical?", answer: "It is not raining", options: ["It is raining", "It is not raining", "It might snow", "No conclusion"], explanation: "Using the rule, if rain always makes ground wet, not wet means no rain." },
+        { prompt: "Choose the strongest plan before a school project starts.", answer: "List steps and materials first", options: ["Guess and start immediately", "List steps and materials first", "Wait until the deadline", "Copy a friend's plan"], explanation: "Logical planning begins with clear steps and needed materials." },
+        { prompt: "A code rule says +1, +2, +3, repeat. Start at 5. What is the 4th number?", answer: "11", options: ["9", "10", "11", "12"], explanation: "Sequence: 5, 6 (+1), 8 (+2), 11 (+3)." }
+    ],
+    reasoningVerbal: [
+        { prompt: "Book is to read as fork is to:", answer: "eat", options: ["write", "eat", "sleep", "draw"], explanation: "A book is used to read; a fork is used to eat." },
+        { prompt: "Choose the best synonym for brave.", answer: "courageous", options: ["timid", "courageous", "silent", "tiny"], explanation: "Courageous has nearly the same meaning as brave." },
+        { prompt: "Choose the sentence where 'bark' means tree bark.", answer: "The tree bark felt rough.", options: ["The dog bark was loud.", "The tree bark felt rough.", "Please bark at the door.", "Bark quickly to win."], explanation: "Context shows bark as the outer layer of a tree." },
+        { prompt: "Complete the analogy: hot : cold :: day :", answer: "night", options: ["light", "sun", "night", "clock"], explanation: "Hot and cold are opposites, so day pairs with its opposite: night." },
+        { prompt: "Choose the best meaning of predict.", answer: "to say what may happen later", options: ["to remember the past", "to say what may happen later", "to copy exactly", "to erase details"], explanation: "Predict means making a smart guess about the future." },
+        { prompt: "Which sentence is most logical and clear?", answer: "Because it was late, we finished quickly and packed up.", options: ["Because late was it, packed we up quickly.", "Because it was late, we finished quickly and packed up.", "Because it late, quickly finished and packed.", "Late because packed quickly was we."], explanation: "It uses clear grammar and a sensible cause-effect structure." }
+    ],
+    reasoningCognitive: [
+        { prompt: "You need to solve homework, pack your bag, and charge your tablet. What should you do first?", answer: "Make a short plan in order", options: ["Do random tasks", "Make a short plan in order", "Ignore all tasks", "Play first and hope"], explanation: "Planning first improves focus and time use." },
+        { prompt: "Remember this list: pen, lamp, key. Which item was second?", answer: "lamp", options: ["pen", "lamp", "key", "book"], explanation: "The second word in the list is lamp." },
+        { prompt: "You are stuck on a hard question. What is the best strategy?", answer: "Break it into smaller steps", options: ["Give up immediately", "Pick without reading", "Break it into smaller steps", "Skip all work"], explanation: "Chunking tasks into smaller steps helps the brain solve problems." },
+        { prompt: "If a puzzle has 3 steps and each step takes 4 minutes, total time is:", answer: "12 minutes", options: ["7 minutes", "8 minutes", "12 minutes", "16 minutes"], explanation: "Multiply 3 by 4 to get 12 minutes." },
+        { prompt: "You must remember three instructions from your teacher. What helps most?", answer: "Repeat them quietly and write key words", options: ["Look away and guess", "Repeat them quietly and write key words", "Talk to a friend instead", "Do nothing"], explanation: "Repeating and noting key words supports working memory." },
+        { prompt: "When checking your answer, what should you do last?", answer: "Compare with the question goal", options: ["Erase everything", "Compare with the question goal", "Change it randomly", "Close your notebook"], explanation: "Final checks should confirm your answer matches what was asked." }
     ]
 };
 
@@ -937,6 +981,7 @@ const appState = {
     activeModule: "spelling",
     currentQuestion: null,
     usedQuestionKeys: {},
+    roundDiversityKeys: {},
     roundAnswered: 0,
     roundCorrect: 0,
     questionTriesLeft: SPELLING_MAX_TRIES,
@@ -1164,7 +1209,7 @@ function updateAiStatusForMode() {
         return;
     }
 
-    updateAiStatus(`AI Teacher is automatic via server endpoint. Model: ${settings.model}`);
+    updateAiStatus(`AI Teacher is set to use server mode (${settings.model}). If the server is unavailable, local smart tutor will answer.`);
 }
 
 function updateAiStatus(message, mode = "") {
@@ -1404,6 +1449,7 @@ function resetCurrentRuntimeProgress() {
     appState.questionTriesLeft = SPELLING_MAX_TRIES;
     appState.teacherChatHistory = [];
     appState.usedQuestionKeys = {};
+    appState.roundDiversityKeys = {};
 }
 
 function renderKnownProfileNames() {
@@ -1502,13 +1548,23 @@ function getSubjectByModule(moduleId) {
     return module ? module.subject : "english";
 }
 
+function applyThemeForModule(moduleId) {
+    const subjectId = getSubjectByModule(moduleId);
+    document.body.dataset.subject = subjectId;
+    document.body.dataset.module = moduleId;
+}
+
 function switchModule(moduleId) {
     appState.activeSubject = getSubjectByModule(moduleId);
     appState.activeModule = moduleId;
+    applyThemeForModule(moduleId);
     appState.roundAnswered = 0;
     appState.roundCorrect = 0;
     appState.teacherChatHistory = [];
-    appState.usedQuestionKeys[moduleId] = [];
+    if (!Array.isArray(appState.usedQuestionKeys[moduleId])) {
+        appState.usedQuestionKeys[moduleId] = [];
+    }
+    appState.roundDiversityKeys[moduleId] = [];
 
     const module = MODULES.find((m) => m.id === moduleId);
     const tutorial = moduleTutorials[moduleId];
@@ -1523,7 +1579,7 @@ function switchModule(moduleId) {
             <div class="tutorial-actions">
                 <button id="replay-tutorial" class="small-btn" type="button">Replay Tutorial</button>
                 <button id="hear-tutorial" class="small-btn" type="button">Hear Tutorial</button>
-                <button id="restart-section" class="small-btn" type="button">Replay This Section</button>
+                <button id="restart-section" class="small-btn" type="button">Start New Round</button>
             </div>
         </div>
     `;
@@ -1551,8 +1607,8 @@ function switchModule(moduleId) {
     restartSectionBtn.addEventListener("click", () => {
         appState.roundAnswered = 0;
         appState.roundCorrect = 0;
-        appState.usedQuestionKeys[moduleId] = [];
-        setFeedback(true, "Section restarted. Let's learn together from question 1.");
+        appState.roundDiversityKeys[moduleId] = [];
+        setFeedback(true, "Started a new round with fresh questions from this section.");
         nextQuestion();
     });
 
@@ -1578,6 +1634,9 @@ function nextQuestion() {
     }
 
     const moduleId = appState.activeModule;
+    if (appState.roundAnswered === 0) {
+        appState.roundDiversityKeys[moduleId] = [];
+    }
     const stage = appState.progress[moduleId].stage;
     const question = getQuestion(moduleId, stage);
 
@@ -1586,16 +1645,91 @@ function nextQuestion() {
 }
 
 function getQuestion(moduleId, stage) {
-    const stageData = moduleData[moduleId][stage];
+    const stageData = moduleData[moduleId][stage] || [];
+    const modulePool = getAllModuleQuestions(moduleId);
     const used = appState.usedQuestionKeys[moduleId] || [];
+    const roundUsed = appState.roundDiversityKeys[moduleId] || [];
 
-    const available = stageData.filter((item) => !used.includes(itemKey(moduleId, item)));
-    const pool = available.length ? available : stageData;
+    const availableInStage = stageData.filter((item) => !used.includes(itemKey(moduleId, item)));
+    const availableInModule = modulePool.filter((item) => !used.includes(itemKey(moduleId, item)));
+    const diverseInStage = availableInStage.filter((item) => isRoundDiverse(moduleId, item, roundUsed));
+    const diverseInModule = availableInModule.filter((item) => isRoundDiverse(moduleId, item, roundUsed));
+    const diverseInWholeModule = modulePool.filter((item) => isRoundDiverse(moduleId, item, roundUsed));
+
+    // Prefer current-stage unseen and round-diverse questions, then widen pool as needed.
+    const pool = diverseInStage.length
+        ? diverseInStage
+        : (diverseInModule.length
+            ? diverseInModule
+            : (availableInStage.length
+                ? availableInStage
+                : (availableInModule.length
+                    ? availableInModule
+                    : (diverseInWholeModule.length ? diverseInWholeModule : modulePool))));
+
     const pick = pool[Math.floor(Math.random() * pool.length)];
     const key = itemKey(moduleId, pick);
+    const diversityKeys = getRoundDiversityKeys(moduleId, pick);
 
     appState.usedQuestionKeys[moduleId] = [...new Set([...used, key])];
+    appState.roundDiversityKeys[moduleId] = [...new Set([...roundUsed, ...diversityKeys])];
     return pick;
+}
+
+function isRoundDiverse(moduleId, item, roundUsed) {
+    const keys = getRoundDiversityKeys(moduleId, item);
+    return keys.every((key) => !roundUsed.includes(key));
+}
+
+function getRoundDiversityKeys(moduleId, item) {
+    if (!item || typeof item !== "object") return [];
+
+    if (moduleId === "spelling") {
+        return [`word:${normalizeQuestionText(item.word || "")}`];
+    }
+
+    if (moduleId === "parts") {
+        const target = normalizeQuestionText(item.target || "");
+        const sentence = normalizeQuestionText(stripGeneratedPartsSentenceTail(item.sentence || ""));
+        return [`target:${target}`, `sentence:${sentence}`];
+    }
+
+    if (item.prompt) {
+        return [`prompt:${normalizeQuestionText(stripGeneratedPromptDecorators(item.prompt))}`];
+    }
+
+    if (item.sentence) {
+        return [`sentence:${normalizeQuestionText(stripGeneratedPartsSentenceTail(item.sentence))}`];
+    }
+
+    return [itemKey(moduleId, item)];
+}
+
+function stripGeneratedPartsSentenceTail(sentence) {
+    return String(sentence || "")
+        .replace(/\s+[A-Z][a-z]+ reviewed this in the [^.]+\.$/i, "")
+        .trim();
+}
+
+function stripGeneratedPromptDecorators(prompt) {
+    return String(prompt || "")
+        .replace(/^[A-Za-z ]+\s*\(Q\d+\):\s*/i, "")
+        .replace(/\s*Step 1: find the key clue\. Step 2: rule out close distractors before choosing\.$/i, "")
+        .replace(/\s*Multi-step challenge: identify the clue, test each choice, then choose the best-supported answer\.$/i, "")
+        .trim();
+}
+
+function getAllModuleQuestions(moduleId) {
+    const byStage = moduleData[moduleId] || {};
+    const all = [];
+
+    for (let stage = 1; stage <= STAGES_PER_MODULE; stage += 1) {
+        const questions = byStage[stage];
+        if (!Array.isArray(questions)) continue;
+        all.push(...questions);
+    }
+
+    return all;
 }
 
 function renderQuestion(moduleId, q, stage) {
@@ -1608,7 +1742,7 @@ function renderQuestion(moduleId, q, stage) {
     if (moduleId === "spelling") {
         promptHTML += `
             <p><strong>Hint:</strong> ${q.hint}</p>
-            <p><strong>Variant note:</strong> ${q.variantNote}</p>
+            <p><strong>Variant note:</strong> UK/US spelling variants may both be accepted.</p>
             <button class="small-btn" id="speak-btn" type="button">Read Word Prompt</button>
             <img src="${q.image}" alt="Spelling clue image">
         </div>`;
@@ -1631,6 +1765,7 @@ function renderQuestion(moduleId, q, stage) {
         promptHTML += `
             <p>${q.sentence}</p>
             <p><strong>What part of speech is "${q.target}"?</strong></p>
+            ${q.challenge ? `<p><strong>Reasoning tip:</strong> ${q.challenge}</p>` : ""}
         </div>`;
         answerHTML = renderOptionButtons(q.options);
     } else {
@@ -1813,9 +1948,9 @@ function finishRound() {
         <div class="prompt-card">
             <h3>Round Summary</h3>
             <p>${summary}</p>
-            <p>Tip: Review mistakes below and replay this module for mastery.</p>
+            <p>Tip: Review mistakes below, then continue for fresh questions.</p>
         </div>
-        <button class="btn-primary" id="play-round-again" type="button">Play Another Round</button>
+        <button class="btn-primary" id="play-round-again" type="button">Continue with New Round</button>
     `;
 
     lessonFeedbackEl.className = "lesson-feedback";
@@ -1824,7 +1959,7 @@ function finishRound() {
     document.getElementById("play-round-again").addEventListener("click", () => {
         appState.roundAnswered = 0;
         appState.roundCorrect = 0;
-        appState.usedQuestionKeys[moduleId] = [];
+        appState.roundDiversityKeys[moduleId] = [];
         nextQuestion();
     });
 
@@ -1835,47 +1970,50 @@ function finishRound() {
 }
 
 function renderReport() {
+    const activeModule = MODULES.find((module) => module.id === appState.activeModule);
+    if (!activeModule) return;
+
+    const progress = appState.progress[activeModule.id];
+    const accuracy = progress.attempted ? Math.round((progress.correct / progress.attempted) * 100) : 0;
+    const stageBaseline = (progress.stage - 1) * TARGET_QUESTIONS_PER_STAGE;
+    const stageAttempts = Math.max(0, Math.min(TARGET_QUESTIONS_PER_STAGE, progress.attempted - stageBaseline));
+    const stageProgressPercent = Math.round((stageAttempts / TARGET_QUESTIONS_PER_STAGE) * 100);
+
     if (reportOwnerEl) {
-        reportOwnerEl.textContent = `Parent report for: ${appState.activeProfileName}`;
+        reportOwnerEl.textContent = `Player: ${appState.activeProfileName} | Section: ${activeModule.title}`;
     }
 
     reportGridEl.innerHTML = "";
 
-    MODULES.forEach((module) => {
-        const progress = appState.progress[module.id];
-        const accuracy = progress.attempted ? Math.round((progress.correct / progress.attempted) * 100) : 0;
+    const card = document.createElement("article");
+    card.className = "report-card active-section-report";
+    card.innerHTML = `
+        <h4>${activeModule.title}</h4>
+        <p class="report-chip">Stage ${progress.stage} Adventure</p>
+        <div class="xp-meter" role="img" aria-label="Stage progress ${stageProgressPercent}%">
+            <div class="xp-fill" style="width: ${stageProgressPercent}%;"></div>
+        </div>
+        <p class="xp-label">Stage progress: ${stageAttempts}/${TARGET_QUESTIONS_PER_STAGE} questions</p>
+        <div class="report-stats-row">
+            <span>Score: <strong>${progress.score}</strong></span>
+            <span>Accuracy: <strong>${accuracy}%</strong></span>
+            <span>Attempts: <strong>${progress.attempted}</strong></span>
+        </div>
+    `;
 
-        const card = document.createElement("article");
-        card.className = "report-card";
-        card.innerHTML = `
-            <h4>${module.title}</h4>
-            <p>Stage: ${progress.stage}</p>
-            <p>Score: ${progress.score}</p>
-            <p>Accuracy: ${accuracy}%</p>
-            <p>Attempts: ${progress.attempted}</p>
-        `;
+    reportGridEl.appendChild(card);
 
-        reportGridEl.appendChild(card);
-    });
+    const sectionMistakes = (progress.mistakes || []).slice(-10).reverse();
 
-    const allMistakes = MODULES.flatMap((module) =>
-        appState.progress[module.id].mistakes.map((mistake) => ({
-            module: module.title,
-            ...mistake
-        }))
-    )
-        .slice(-12)
-        .reverse();
-
-    if (!allMistakes.length) {
-        mistakeListEl.innerHTML = "<li>No mistakes recorded yet. Keep going.</li>";
+    if (!sectionMistakes.length) {
+        mistakeListEl.innerHTML = "<li>No mistakes in this section yet. You are doing great.</li>";
         return;
     }
 
-    mistakeListEl.innerHTML = allMistakes
+    mistakeListEl.innerHTML = sectionMistakes
         .map(
             (m) =>
-                `<li><strong>${m.module}:</strong> ${escapeHtml(m.prompt)} | Your answer: ${escapeHtml(
+                `<li><strong>${activeModule.title}:</strong> ${escapeHtml(m.prompt)} | Your answer: ${escapeHtml(
                     String(m.userAnswer)
                 )} | Correct: ${escapeHtml(String(m.correctAnswer))}</li>`
         )
@@ -2397,54 +2535,306 @@ function expandQuestionBanks() {
 
 function expandStageToTarget(moduleId, stage, baseItems, targetCount) {
     if (baseItems.length >= targetCount) {
-        return baseItems.slice(0, targetCount);
+        return baseItems.slice(0, targetCount).map((item, index) => {
+            const clone = deepClone(item);
+            clone._qid = buildQuestionId(moduleId, stage, index + 1);
+            return clone;
+        });
     }
 
-    const expanded = baseItems.map((item) => deepClone(item));
+    const expanded = [];
     const originals = baseItems.map((item) => deepClone(item));
-    let variantIndex = 1;
+    let questionIndex = 1;
 
-    while (expanded.length < targetCount) {
-        const template = originals[(expanded.length - baseItems.length) % originals.length];
+    originals.forEach((item) => {
+        const clone = deepClone(item);
+        clone._qid = buildQuestionId(moduleId, stage, questionIndex);
+        expanded.push(clone);
+        questionIndex += 1;
+    });
+
+    let variantIndex = 1;
+    const uniquenessGuard = new Set(expanded.map((item) => JSON.stringify(item)));
+    let safety = 0;
+
+    while (expanded.length < targetCount && safety < targetCount * 20) {
+        const templateIndex = getRotatedTemplateIndex(moduleId, stage, variantIndex, originals.length);
+        const template = originals[templateIndex];
         const clone = deepClone(template);
-        applyVariantLabel(moduleId, stage, clone, variantIndex);
+        applyVariantLabel(moduleId, stage, clone, variantIndex, questionIndex);
+        const signature = JSON.stringify(clone);
+
+        if (uniquenessGuard.has(signature)) {
+            variantIndex += 1;
+            safety += 1;
+            continue;
+        }
+
+        uniquenessGuard.add(signature);
+        clone._qid = buildQuestionId(moduleId, stage, questionIndex);
         expanded.push(clone);
         variantIndex += 1;
+        questionIndex += 1;
+        safety += 1;
     }
 
     return expanded;
 }
 
-function applyVariantLabel(moduleId, stage, item, variantIndex) {
-    const label = `(Stage ${stage} Practice ${variantIndex})`;
+function getRotatedTemplateIndex(moduleId, stage, variantIndex, totalTemplates) {
+    if (!totalTemplates) return 0;
+
+    const offset = simpleHash(`${moduleId}-${stage}`) % totalTemplates;
+    const step = Math.max(1, (stage * 2) + 1);
+    return (offset + variantIndex * step) % totalTemplates;
+}
+
+function applyVariantLabel(moduleId, stage, item, variantIndex, questionIndex) {
+    const context = buildVariationContext(stage, variantIndex, questionIndex);
 
     if (moduleId === "spelling") {
-        item.hint = `${item.hint} ${label}`;
-        item.variantNote = `${item.variantNote} | ${label}`;
-        return;
+        item.hint = `${item.hint} ${context.hintTail}`;
+        item.variantNote = `${item.variantNote} | ${context.noteTail}`;
+    } else if (moduleId === "parts") {
+        item.sentence = `${item.sentence} ${context.sentenceTail}`;
+        item.explanation = `${item.explanation} ${context.explanationTail}`;
+    } else if (moduleId === "reading") {
+        item.prompt = `${context.promptLead} ${item.prompt}`;
+        item.passage = `${item.passage} ${context.readingTail}`;
+        item.explanation = `${item.explanation} ${context.explanationTail}`;
+    } else {
+        item.prompt = `${context.promptLead} ${item.prompt}`;
+        item.explanation = `${item.explanation} ${context.explanationTail}`;
+    }
+
+    applyDifficultyUpgrade(moduleId, stage, item, variantIndex);
+}
+
+function buildQuestionId(moduleId, stage, questionNumber) {
+    const padded = String(questionNumber).padStart(3, "0");
+    return `${moduleId}-s${stage}-q${padded}`;
+}
+
+function buildVariationContext(stage, variantIndex, questionIndex) {
+    const names = ["Amina", "Leo", "Sofia", "Noah", "Maya", "Ethan", "Zuri", "Liam", "Nia", "Kai"];
+    const places = ["library", "science lab", "music room", "garden", "sports field", "art studio", "classroom", "museum"];
+    const times = ["this morning", "after lunch", "before sunset", "during practice", "on Friday", "yesterday", "next week", "during break"];
+    const goalsByStage = {
+        1: ["Warm-up", "Basic check", "Quick review", "Core skill"],
+        2: ["Apply skill", "Context clue", "Mixed practice", "Careful choice"],
+        3: ["Challenge", "Reasoning focus", "Advanced check", "Precision task"]
+    };
+
+    const name = names[(variantIndex + stage) % names.length];
+    const place = places[(variantIndex * 2 + stage) % places.length];
+    const time = times[(variantIndex * 3 + stage) % times.length];
+    const goalList = goalsByStage[stage] || goalsByStage[1];
+    const goal = goalList[variantIndex % goalList.length];
+    const code = `Q${questionIndex}`;
+
+    return {
+        promptLead: `${goal} (${code}):`,
+        sentenceTail: `${name} reviewed this in the ${place} ${time}.`,
+        hintTail: `Think about ${name}'s clue from the ${place} ${time}.`,
+        noteTail: `${goal} ${code}`,
+        readingTail: `${name} discussed this detail in the ${place} ${time}.`,
+        explanationTail: `${goal} ${code}.`
+    };
+}
+
+function applyDifficultyUpgrade(moduleId, stage, item, variantIndex) {
+    if (stage <= 1 || !item || typeof item !== "object") return;
+
+    const stageReasoningLine =
+        stage === 2
+            ? "Step 1: find the key clue. Step 2: rule out close distractors before choosing."
+            : "Multi-step challenge: identify the clue, test each choice, then choose the best-supported answer.";
+
+    if (typeof item.prompt === "string" && item.prompt.trim()) {
+        item.prompt = `${item.prompt} ${stageReasoningLine}`;
     }
 
     if (moduleId === "parts") {
-        item.sentence = `${item.sentence} ${label}`;
-        item.explanation = `${item.explanation} ${label}`;
-        return;
+        item.challenge =
+            stage === 2
+                ? "Look at nearby words to verify the target word's job in the sentence."
+                : "Check the target word's role and eliminate answers that only describe meaning, not grammar function.";
+    }
+
+    if (moduleId === "spelling") {
+        item.hint =
+            stage === 2
+                ? `${item.hint} Focus on vowel patterns and common endings.`
+                : `${item.hint} Use syllables, roots, and UK/US variant awareness.`;
+    }
+
+    if (Array.isArray(item.options) && item.options.length && typeof item.answer === "string") {
+        item.options = buildTrickierOptions(item.answer, item.options, stage, variantIndex, moduleId);
+    }
+}
+
+function buildTrickierOptions(answer, options, stage, variantIndex, moduleId) {
+    const normalizedAnswer = String(answer).trim();
+    const existingWrong = options
+        .map((opt) => String(opt).trim())
+        .filter((opt) => opt && opt !== normalizedAnswer);
+
+    const generatedWrong = generateCloseDistractors(normalizedAnswer, stage, moduleId);
+    const candidateWrong = uniqueList([...existingWrong, ...generatedWrong]).filter((opt) => opt !== normalizedAnswer);
+    const pickedWrong = deterministicPick(candidateWrong, 3, `${moduleId}-${stage}-${variantIndex}-${normalizedAnswer}`);
+
+    const filledWrong = pickedWrong.slice();
+    let fallbackIndex = 1;
+    while (filledWrong.length < 3) {
+        const fallback = buildFallbackDistractor(normalizedAnswer, fallbackIndex);
+        if (fallback !== normalizedAnswer && !filledWrong.includes(fallback)) {
+            filledWrong.push(fallback);
+        }
+        fallbackIndex += 1;
+    }
+
+    return [normalizedAnswer, ...filledWrong];
+}
+
+function generateCloseDistractors(answer, stage, moduleId) {
+    const out = [];
+    const numeric = answer.match(/^(\d+)([^\d].*)?$/);
+    const fraction = answer.match(/^(\d+)\/(\d+)$/);
+    const degree = answer.match(/^(\d+)\s+degrees$/i);
+
+    if (fraction) {
+        const n = Number(fraction[1]);
+        const d = Number(fraction[2]);
+        out.push(`${n + 1}/${d}`);
+        out.push(`${Math.max(1, n - 1)}/${d}`);
+        out.push(`${n}/${d + 1}`);
+    }
+
+    if (degree) {
+        const n = Number(degree[1]);
+        out.push(`${n + 10} degrees`);
+        out.push(`${Math.max(0, n - 10)} degrees`);
+        out.push(`${n + 5} degrees`);
+    }
+
+    if (numeric) {
+        const n = Number(numeric[1]);
+        const suffix = numeric[2] || "";
+        const spread = stage === 2 ? [1, -1, 2] : [2, -2, 5];
+        spread.forEach((delta) => {
+            out.push(`${Math.max(0, n + delta)}${suffix}`);
+        });
+    }
+
+    const replacementPairs = [
+        ["before", "after"],
+        ["after", "before"],
+        ["past", "future"],
+        ["future", "past"],
+        ["present", "past"],
+        ["north", "south"],
+        ["south", "north"],
+        ["east", "west"],
+        ["west", "east"],
+        ["solid", "liquid"],
+        ["liquid", "solid"],
+        ["oxygen", "carbon dioxide"],
+        ["carbon dioxide", "oxygen"],
+        ["legislative", "executive"],
+        ["executive", "judicial"],
+        ["photosynthesis", "respiration"],
+        ["condensation", "evaporation"],
+        ["noun", "verb"],
+        ["verb", "noun"],
+        ["adjective", "adverb"],
+        ["adverb", "adjective"]
+    ];
+
+    replacementPairs.forEach(([from, to]) => {
+        const rx = new RegExp(`\\b${escapeRegExp(from)}\\b`, "i");
+        if (rx.test(answer)) {
+            out.push(answer.replace(rx, to));
+        }
+    });
+
+    if (/\b(and|or)\b/i.test(answer)) {
+        out.push(answer.replace(/\band\b/i, "or"));
+        out.push(answer.replace(/\bor\b/i, "and"));
     }
 
     if (moduleId === "reading") {
-        item.prompt = `${label}: ${item.prompt}`;
-        item.passage = `${item.passage} This is extra reading practice.`;
-        return;
+        out.push("There is not enough information in the passage.");
     }
 
-    item.prompt = `${label}: ${item.prompt}`;
-    item.explanation = `${item.explanation} ${label}`;
+    return uniqueList(out).filter((entry) => entry && entry !== answer);
+}
+
+function deterministicPick(list, count, seed) {
+    const scored = list
+        .map((item) => ({ item, score: simpleHash(`${seed}|${item}`) }))
+        .sort((a, b) => a.score - b.score);
+    return scored.slice(0, count).map((entry) => entry.item);
+}
+
+function buildFallbackDistractor(answer, index) {
+    const numeric = answer.match(/^(\d+)([^\d].*)?$/);
+    if (numeric) {
+        const base = Number(numeric[1]);
+        const suffix = numeric[2] || "";
+        return `${Math.max(0, base + index + 1)}${suffix}`;
+    }
+
+    return `${answer} (${index})`;
+}
+
+function uniqueList(items) {
+    const out = [];
+    const seen = new Set();
+    items.forEach((entry) => {
+        const value = String(entry || "").trim();
+        if (!value || seen.has(value)) return;
+        seen.add(value);
+        out.push(value);
+    });
+    return out;
+}
+
+function simpleHash(text) {
+    let hash = 0;
+    for (let i = 0; i < text.length; i += 1) {
+        hash = (hash * 31 + text.charCodeAt(i)) >>> 0;
+    }
+    return hash;
+}
+
+function escapeRegExp(text) {
+    return String(text).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function itemKey(moduleId, item) {
-    if (moduleId === "spelling") return `${item.word}-${item.hint}`;
-    if (item.prompt) return `${item.prompt}-${item.answer}`;
-    if (item.sentence) return `${item.sentence}-${item.target}`;
+    if (item && item._qid) {
+        return item._qid;
+    }
+
+    if (moduleId === "spelling") {
+        return normalizeQuestionText(item.word || "");
+    }
+    if (item.prompt) {
+        return `${normalizeQuestionText(item.prompt)}-${normalizeQuestionText(item.answer || "")}`;
+    }
+    if (item.sentence) {
+        const target = normalizeQuestionText(item.target || "");
+        return `${normalizeQuestionText(item.sentence)}-${target}`;
+    }
     return JSON.stringify(item).slice(0, 80);
+}
+
+function normalizeQuestionText(text) {
+    return String(text || "")
+        .replace(/\s*:\s*/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
 }
 
 function clampStage(stage) {

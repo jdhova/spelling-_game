@@ -1,16 +1,17 @@
 # 🎮 BrightPath Learning Quest
 
-An interactive learning game for Grade 5-6 learners (age 10-11), with topics across English, Mathematics, Science, Social Studies, Health Education, and US/Canada world knowledge.
+An interactive learning game for Grade 5-6 learners (age 10-11), with topics across English, Mathematics, Science, Social Studies, Health Education, US/Canada world knowledge, and reasoning skills.
 
 ## 🌟 Features
 
-- **6 Learning Sections**:
-  - Spelling Studio (with UK/US spelling variants)
-  - Parts of Speech (noun, verb, adjective, adverb)
-  - Sentence Builder
-  - Tense Quest (past, present, future and advanced forms)
-  - Punctuation Lab
-  - Reading Mini Quiz
+- **24 Learning Modules across 7 Subjects**:
+  - English: spelling, grammar, sentence building, tense, punctuation, reading
+  - Mathematics: arithmetic, fractions, geometry
+  - Science: life science, physical science, earth science
+  - Social Studies: history, geography, civics
+  - Health Education: nutrition, hygiene, safety and wellness
+  - World Knowledge: US and Canada basics, landmarks, government and society
+  - Reasoning Skills: logical reasoning, verbal reasoning, cognitive reasoning
 - **Stage-Based Progression**: Gentle age-level progression with 3 stages per module
 - **Calm Learning Mode**: No timer, no pressure
 - **Audio Support**: Voice prompts in spelling module
